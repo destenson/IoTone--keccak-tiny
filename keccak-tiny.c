@@ -116,8 +116,10 @@ mkapply_sd(setout, dst[i] = src[i])  // setout
 /** The sponge-based hash construction. **/
 static inline int hash(uint8_t* out, size_t outlen,
                        const uint8_t* in, size_t inlen,
-                       size_t rate, uint8_t delim) {
-  if ((out == NULL) || ((in == NULL) && inlen != 0) || (rate >= Plen)) {
+                       size_t rate, uint8_t delim)
+{
+  if ((out == NULL) || ((in == NULL) && inlen != 0) || (rate >= Plen))
+  {
     return -1;
   }
   uint8_t a[Plen] = {0};
@@ -133,31 +135,11 @@ static inline int hash(uint8_t* out, size_t outlen,
   // Squeeze output.
   foldP(out, outlen, setout);
   setout(a, out, outlen);
-  memset_s(a, 200, 0, 200);
+  //TODO: c11 problem: replaced
+  //memset_s(a, 200, 0, 200);
+  //Reference: http://en.cppreference.com/w/c/string/byte/memset
+  memset(a, 0, 200);
   return 0;
 }
 
-/*** Helper macros to define SHA3 and SHAKE instances. ***/
-#define defshake(bits)                                            \
-  int shake##bits(uint8_t* out, size_t outlen,                    \
-                  const uint8_t* in, size_t inlen) {              \
-    return hash(out, outlen, in, inlen, 200 - (bits / 4), 0x1f);  \
-  }
-#define defsha3(bits)                                             \
-  int sha3_##bits(uint8_t* out, size_t outlen,                    \
-                  const uint8_t* in, size_t inlen) {              \
-    if (outlen > (bits/8)) {                                      \
-      return -1;                                                  \
-    }                                                             \
-    return hash(out, outlen, in, inlen, 200 - (bits / 4), 0x06);  \
-  }
-
-/*** FIPS202 SHAKE VOFs ***/
-defshake(128)
-defshake(256)
-
-/*** FIPS202 SHA3 FOFs ***/
-defsha3(224)
-defsha3(256)
-defsha3(384)
-defsha3(512)
+#include "define-macros.h"
