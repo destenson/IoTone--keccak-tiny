@@ -15,4 +15,4 @@ MINGW*)
     ;;
 esac
 gcc -c keccak-tiny.c
-ar rvs -o libkeccak-tiny.$so
+ar rvs -o libkeccak-tiny.$so keccak-tiny.o
