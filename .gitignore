@@ -5,7 +5,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -137,3 +138,5 @@ kcksum
 .ninja_deps
 .ninja_log
 JUNK/
+
+cmake*/
